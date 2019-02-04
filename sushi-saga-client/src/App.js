@@ -33,7 +33,7 @@ class App extends Component {
   handleEatSushi = (id) => {
     const newSushis = [...this.state.sushis]
     const eatenSushi = newSushis.find(sushi => sushi.id === id)
-    if (this.state.total - eatenSushi.price > 0){
+    if (this.state.total - eatenSushi.price > -1){
     eatenSushi.eaten = true
     this.setState({sushi: newSushis, plateCounter: [...this.state.plateCounter, eatenSushi], total: this.state.total - eatenSushi.price})
     } else {
