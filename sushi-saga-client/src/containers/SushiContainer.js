@@ -1,4 +1,5 @@
 import React, { Fragment } from 'react'
+import Sushi from '../components/Sushi'
 import MoreButton from '../components/MoreButton'
 
 const SushiContainer = (props) => {
@@ -9,8 +10,10 @@ const SushiContainer = (props) => {
           /* 
              Render Sushi components here!
           */
+         props.sushis.map (sushi => 
+           <Sushi key={sushi.id} sushi={sushi} handleEatSushi={props.handleEatSushi} />)
         }
-        <MoreButton />
+        <MoreButton sushiQuantity={props.sushiQuantity} incrementPage={props.incrementPage} page={props.page}/>
       </div>
     </Fragment>
   )
