@@ -4,7 +4,7 @@ const Sushi = (props) => {
   return (
     <div className="sushi">
       <div className="plate" 
-           onClick={() => props.handleEatSushi(props.sushi.id)}>
+           onClick={() => props.handleEatSushi(props.sushi.id, props.sushi.price, props.sushi.eaten)}>
         { 
           /* Tell me if this sushi has been eaten! */ 
 

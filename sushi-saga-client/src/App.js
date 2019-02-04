@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import SushiContainer from './containers/SushiContainer';
+import SushiWallet from './components/sushiWallet';
 import Table from './containers/Table';
 
 // Endpoint!
@@ -20,40 +21,50 @@ class App extends Component {
 
   fetchSushi = () => {
     fetch(API)
-    .then(res => res.json())
-    .then(sushis => {
-      sushis = sushis.map(sushi => {
-        sushi.eaten = false
-        return sushi
-      });
-      this.setState({sushis})
-    })
+      .then(res => res.json())
+      .then(sushis => {
+        sushis = sushis.map(sushi => {
+          sushi.eaten = false
+          return sushi
+        });
+        this.setState({ sushis })
+      })
   }
-    
-  handleEatSushi = (id) => {
-    const newSushis = [...this.state.sushis]
-    const eatenSushi = newSushis.find(sushi => sushi.id === id)
-    if (this.state.total - eatenSushi.price > -1){
-    eatenSushi.eaten = true
-    this.setState({sushi: newSushis, plateCounter: [...this.state.plateCounter, eatenSushi], total: this.state.total - eatenSushi.price})
-    } else {
-      console.log(`You do not have enough money for this sushi!`)
+
+  handleEatSushi = (id, price, eaten) => {
+    if (this.state.total >= price && !eaten) {
+      const newSushis = [...this.state.sushis]
+      const eatenSushi = newSushis.find(sushi => sushi.id === id)
+      eatenSushi.eaten = true
+      this.setState({ sushi: newSushis, plateCounter: [...this.state.plateCounter, eatenSushi], total: this.state.total - price })
     }
-  } 
+  }
 
   incrementPage = () => {
-    this.setState({page: this.state.page + 1})
+    this.setState({ page: this.state.page + 1 })
   }
+
+  handleSubmitForm = (event) => {
+    event.preventDefault();
+    const inputValue = parseInt(event.target.querySelector('.sushiWalletInput').value)
+    const money = inputValue > 0? inputValue : 0
+    this.setState({
+      total: this.state.total + money
+    })
+    event.target.querySelector('.sushiWalletInput').value = '';
+  }
+
 
   render() {
 
     const step = this.state.page * 4
-    const sushiForRendering = this.state.sushis.slice(step, step+4)
-    
+    const sushiForRendering = this.state.sushis.slice(step, step + 4)
+
     return (
       <div className="app">
+        <SushiWallet handleSubmitForm={this.handleSubmitForm}/>
         <SushiContainer sushis={sushiForRendering} sushiQuantity={this.state.sushis.length} handleEatSushi={this.handleEatSushi} incrementPage={this.incrementPage} page={this.state.page} />
-        <Table total={this.state.total} plateCounter={this.state.plateCounter}/>
+        <Table total={this.state.total} plateCounter={this.state.plateCounter} />
       </div>
     );
   }
