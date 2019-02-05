@@ -9,7 +9,8 @@ class App extends Component {
 		sushis: [],
 		sushi1: 0,
 		sushi2: 4,
-		money: 100
+		money: 100,
+		eaten: []
 	};
 
 	componentDidMount = () => {
@@ -17,7 +18,7 @@ class App extends Component {
 			.then(response => response.json())
 			.then(data => {
 				this.setState({
-					sushis: data.map(obj => ({ ...obj, bought: false }))
+					sushis: data.map(sushis => ({ ...sushis, bought: false }))
 				});
 			});
 	};
@@ -28,14 +29,28 @@ class App extends Component {
 
 	moreSushis = () => {
 		this.setState({
-			...this.state,
 			sushi1: this.state.sushi1 + 4,
 			sushi2: this.state.sushi2 + 4
 		});
 	};
 
-	boughtSushi = event => {
-		console.log(event.target.id);
+	boughtSushi = boughtSushi => {
+		const buySushi = this.state.sushis.find(
+			sushi => sushi.id === boughtSushi.id
+		);
+
+		const buySushiCopy = { ...buySushi };
+
+		if (!buySushiCopy.bought && this.state.money >= buySushiCopy.price) {
+			buySushiCopy.bought = true;
+			this.setState({
+				money: this.state.money - buySushiCopy.price,
+				sushis: this.state.sushis.map(sushi =>
+					sushi.id === buySushiCopy.id ? buySushiCopy : sushi
+				),
+				eaten: [...this.state.eaten, buySushiCopy]
+			});
+		}
 	};
 
 	render() {
@@ -46,7 +61,7 @@ class App extends Component {
 					moreSushis={this.moreSushis}
 					buySushi={this.boughtSushi}
 				/>
-				<Table plates={this.showSushis} money={this.state.money} />
+				<Table plates={this.state.eaten} money={this.state.money} />
 			</div>
 		);
 	}

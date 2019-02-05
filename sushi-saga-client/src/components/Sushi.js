@@ -4,13 +4,12 @@ const Sushi = props => {
 	return (
 		<Fragment>
 			<div className="sushi">
-				<div className="plate">
+				<div className="plate" onClick={() => props.buy(props.sushi)}>
 					{props.sushi.bought ? null : (
 						<img
 							src={props.sushi.img_url}
 							id={props.sushi.id}
 							alt={props.sushi.name}
-							onClick={props.buy}
 							width="100%"
 						/>
 					)}
