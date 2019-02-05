@@ -20,11 +20,11 @@ export default class Sushi extends Component {
     }
   }
 
-  componentDidUpdate(prevProps) {
-  if (this.props.sushi !== prevProps.sushi) {
-    this.setState({eaten: false})
-    }
-  }
+  // componentDidUpdate(prevProps) {
+  // if (this.props.sushi !== prevProps.sushi) {
+  //   this.setState({eaten: false})
+  //   }
+  // }
 
   render() {
     return (
